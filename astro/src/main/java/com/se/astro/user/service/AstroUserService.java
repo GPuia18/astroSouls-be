@@ -93,9 +93,21 @@ public class AstroUserService {
             userToLike.createMatch(userThatLikes);
 
             astroUserRepository.save(userToLike);
-            System.out.println(userToLike);
         }
 
         astroUserRepository.save(userThatLikes);
+    }
+
+    public void blockUser(Optional<AstroUser> user, Optional<AstroUser> principalUser) {
+        AstroUser userToBlock = user.get();
+        AstroUser userThatBlocks = principalUser.get();
+
+        if(userThatBlocks.getBlockedUsers().contains(userToBlock.getUsername())){
+            return;
+        }
+
+        userThatBlocks.blockUser(userToBlock);
+
+        astroUserRepository.save(userThatBlocks);
     }
 }

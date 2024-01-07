@@ -119,6 +119,34 @@ public class AstroUserController {
         }
     }
 
+    @PostMapping("/block")
+    public ResponseEntity<?> blockUserByUsernameOrEmail(@RequestBody SearchRequest blockRequest) {
+
+        Optional<AstroUser> principalUser = userPrincipalService.getPrincipalUser();
+
+        if (principalUser.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Optional<AstroUser> user = Optional.empty();
+        if (blockRequest != null) {
+            user = astroUserService.getUserByUsername(blockRequest.getSearch());
+            if (user.isEmpty()) {
+                user = astroUserService.getUserByEmail(blockRequest.getSearch());
+            }
+        }
+
+        if (user.isPresent()) {
+
+            astroUserService.blockUser(user, principalUser);
+
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
     @PostMapping("/match")
     public ResponseEntity<?> matchUserByUsernameOrEmail(@RequestBody SearchRequest matchRequest) {
 

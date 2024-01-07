@@ -81,6 +81,9 @@ public class AstroUser implements UserDetails {
     public void likeUser(AstroUser user){
         this.likedUsers.add(user.username);
     }
+    public void blockUser(AstroUser user){
+        this.blockedUsers.add(user.username);
+    }
 
     public void createMatch(AstroUser user){
         this.matchedUsers.add(user.username);

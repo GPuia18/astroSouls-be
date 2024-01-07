@@ -2,6 +2,7 @@ package com.se.astro.message.service;
 
 import com.se.astro.message.model.Message;
 import com.se.astro.message.model.MessageRequest;
+import com.se.astro.message.model.MessagesBetweenUsersRequest;
 import com.se.astro.message.repository.MessageRepository;
 import com.se.astro.user.model.AstroUser;
 import com.se.astro.user.repository.AstroUserRepository;
@@ -9,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,5 +30,9 @@ public class MessageService {
         messageRepository.save(message);
 
         return message;
+    }
+
+    public Optional<List<Message>> getMessagesBetweenUsers(AstroUser user1, AstroUser user2) {
+        return messageRepository.findAllByUsers(user1.getUsername(), user2.getUsername());
     }
 }

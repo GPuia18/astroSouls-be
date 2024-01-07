@@ -47,7 +47,6 @@ public class AstroUser implements UserDetails {
     private AccountType accountType;
     private boolean banned;
     private List<String> blockedUsers;
-    private List<String> messages;
     private List<String> groups;
 
 
@@ -75,7 +74,6 @@ public class AstroUser implements UserDetails {
         this.likedUsers = new ArrayList<String>();
         this.matchedUsers = new ArrayList<String>();
         this.blockedUsers = new ArrayList<String>();
-        this.messages = new ArrayList<String>();
         this.groups = new ArrayList<String>();
         this.banned = false;
     }
@@ -137,7 +135,6 @@ public class AstroUser implements UserDetails {
                 ", accountType=" + accountType +
                 ", banned=" + banned +
                 ", blockedUsers=" + blockedUsers +
-                ", messages=" + messages +
                 ", groups=" + groups +
                 '}';
     }

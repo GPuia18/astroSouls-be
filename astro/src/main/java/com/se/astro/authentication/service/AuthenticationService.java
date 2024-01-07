@@ -60,7 +60,6 @@ public class AuthenticationService {
                 .likedUsers(new ArrayList<>())
                 .matchedUsers(new ArrayList<>())
                 .blockedUsers(new ArrayList<>())
-                .messages(new ArrayList<>())
                 .groups(new ArrayList<>())
                 .banned(false)
                 .build();

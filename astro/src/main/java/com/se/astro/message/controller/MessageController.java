@@ -2,6 +2,7 @@ package com.se.astro.message.controller;
 
 import com.se.astro.message.model.Message;
 import com.se.astro.message.model.MessageRequest;
+import com.se.astro.message.model.MessagesBetweenUsersRequest;
 import com.se.astro.message.service.MessageService;
 import com.se.astro.user.model.SearchRequest;
 import com.se.astro.helper.UserPrincipalService;
@@ -11,7 +12,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.OptionalInt;
 
 @RestController
 @RequestMapping("api/message")
@@ -44,5 +47,30 @@ public class MessageController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @PostMapping("/all")
+    public ResponseEntity<List<Message>> sendMessageToUserByUsernameOrEmail(@RequestBody MessagesBetweenUsersRequest messagesBetweenUsersRequest) {
+        Optional<AstroUser> principalUser = userPrincipalService.getPrincipalUser();
+
+        if (principalUser.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Optional<AstroUser> user = Optional.empty();
+        if (messagesBetweenUsersRequest != null) {
+            user = astroUserService.getUserByUsername(messagesBetweenUsersRequest.getUsername());
+        }
+
+        if (user.isPresent()) {
+
+            Optional<List<Message>> messages = messageService.getMessagesBetweenUsers(principalUser.get(), user.get());
+
+            if (messages.isPresent()) {
+                return ResponseEntity.ok(messages.get());
+            }
+        }
+
+        return ResponseEntity.notFound().build();
     }
 }

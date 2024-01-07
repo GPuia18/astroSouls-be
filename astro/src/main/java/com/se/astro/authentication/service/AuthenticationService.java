@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +27,19 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(RegisterRequest request) {
+
+        Optional<AstroUser> userInRepo = repository.findByUsername(request.getUsername());
+
+        if(userInRepo.isPresent()){
+            return null;
+        }
+
+        userInRepo = repository.findByEmail(request.getEmail());
+
+        if(userInRepo.isPresent()){
+            return null;
+        }
+
         var user = AstroUser.builder()
                 .email(request.getEmail())
                 .username(request.getUsername())

@@ -14,6 +14,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -28,13 +30,32 @@ public class AuthenticationService {
                 .email(request.getEmail())
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .accountType(AccountType.REGULAR)
+                .accountType(AccountType.REGULAR) // Assuming this is a fixed value for all users
+                .birthday(request.getBirthday())
+                .zodiacSign(request.getZodiacSign())
+                .gender(request.getGender())
+                .searchingFor(request.getSearchingFor())
+                .height(request.getHeight())
+                .nationality(request.getNationality())
+                .language(request.getLanguage())
+                .header(request.getHeader())
+                .description(request.getDescription())
+                .ageRangeMin(request.getAgeRangeMin())
+                .ageRangeMax(request.getAgeRangeMax())
+                .tags(request.getTags())
+                .likedUsers(new ArrayList<>())
+                .matchedUsers(new ArrayList<>())
+                .blockedUsers(new ArrayList<>())
+                .messages(new ArrayList<>())
+                .groups(new ArrayList<>())
+                .banned(false)
                 .build();
 
         repository.save(user);
 
         return createAuthenticationResponse(user);
     }
+
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(

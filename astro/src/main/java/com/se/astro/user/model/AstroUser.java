@@ -45,8 +45,8 @@ public class AstroUser implements UserDetails {
     private AccountType accountType;
     private boolean banned;
     private List<String> blockedUsers;
-    private List<Message> messages;
-    private List<Group> groups;
+    private List<String> messages;
+    private List<String> groups;
 
 
     public AstroUser(String username, String password, String email, LocalDateTime birthday,
@@ -73,9 +73,18 @@ public class AstroUser implements UserDetails {
         this.likedUsers = new ArrayList<String>();
         this.matchedUsers = new ArrayList<String>();
         this.blockedUsers = new ArrayList<String>();
-        this.messages = new ArrayList<Message>();
-        this.groups = new ArrayList<Group>();
+        this.messages = new ArrayList<String>();
+        this.groups = new ArrayList<String>();
         this.banned = false;
+    }
+
+    public void likeUser(AstroUser user){
+        this.likedUsers.add(user.username);
+    }
+
+    public void createMatch(AstroUser user){
+        this.matchedUsers.add(user.username);
+        user.matchedUsers.add(this.username);
     }
 
     @Override
@@ -101,5 +110,34 @@ public class AstroUser implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "AstroUser{" +
+                "id='" + id + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", birthday=" + birthday +
+                ", zodiacSign='" + zodiacSign + '\'' +
+                ", gender=" + gender +
+                ", searchingFor=" + searchingFor +
+                ", height=" + height +
+                ", nationality=" + nationality +
+                ", language=" + language +
+                ", header='" + header + '\'' +
+                ", description='" + description + '\'' +
+                ", ageRangeMin=" + ageRangeMin +
+                ", ageRangeMax=" + ageRangeMax +
+                ", tags=" + tags +
+                ", likedUsers=" + likedUsers +
+                ", matchedUsers=" + matchedUsers +
+                ", accountType=" + accountType +
+                ", banned=" + banned +
+                ", blockedUsers=" + blockedUsers +
+                ", messages=" + messages +
+                ", groups=" + groups +
+                '}';
     }
 }

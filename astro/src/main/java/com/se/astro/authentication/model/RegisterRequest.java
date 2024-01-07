@@ -1,9 +1,17 @@
 package com.se.astro.authentication.model;
 
+import com.se.astro.user.model.enums.Gender;
+import com.se.astro.user.model.enums.Language;
+import com.se.astro.user.model.enums.Nationality;
+import com.se.astro.user.model.enums.Tag;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.mongodb.core.index.Indexed;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -13,4 +21,16 @@ public class RegisterRequest {
     private String username;
     private String email;
     private String password;
+    private LocalDateTime birthday;
+    private String zodiacSign;
+    private Gender gender;
+    private List<Gender> searchingFor;
+    private double height;
+    private Nationality nationality;
+    private List<Language> language;
+    private String header;
+    private String description;
+    private int ageRangeMin;
+    private int ageRangeMax;
+    private List<Tag> tags;
 }

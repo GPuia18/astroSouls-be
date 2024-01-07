@@ -24,6 +24,8 @@ public class AstroUserService {
     private final MongoTemplate mongoTemplate;
     private final AstroUserRepository astroUserRepository;
 
+
+
     public List<AstroUser> getAllUsers(){
         return astroUserRepository.findAll();
     }
@@ -76,5 +78,14 @@ public class AstroUserService {
 
         List<AstroUser> users = mongoTemplate.find(query, AstroUser.class);
         return users;
+    }
+
+    public void likeUser(Optional<AstroUser> user, Optional<AstroUser> principalUser) {
+        AstroUser userToLike = user.get();
+        AstroUser userThatLikes = principalUser.get();
+
+        userThatLikes.likeUser(userToLike);
+
+        astroUserRepository.save(userThatLikes);
     }
 }

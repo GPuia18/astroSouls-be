@@ -15,5 +15,5 @@ public enum Tag {
     ANIMAL_LOVER,
     TECH_ENTHUSIAST,
     NATURE_LOVER,
-    MOVIE_BUFF
+    MOVIE_BUFF,
 }

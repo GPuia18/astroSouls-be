@@ -11,10 +11,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/auth")
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000")
 public class AuthenticationController {
 
     private final AuthenticationService service;
-    @CrossOrigin(origins = "http://localhost:3000")
+
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
         @RequestBody RegisterRequest request

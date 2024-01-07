@@ -17,6 +17,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("api/users")
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000")
 public class AstroUserController {
     private final AstroUserService astroUserService;
 

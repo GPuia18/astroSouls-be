@@ -48,6 +48,44 @@ public class AstroUserController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @PostMapping("/liked-users")
+    public ResponseEntity<List<AstroUser>> fetchLikedUsers() {
+        Optional<AstroUser> principalUser = getPrincipalUser();
+
+        if (principalUser.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Optional<List<AstroUser>> optionalLikedUsers = astroUserService.getLikedUsers(principalUser.get());
+
+        if(optionalLikedUsers.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+
+        List<AstroUser> likedUsers = optionalLikedUsers.get();
+
+        return ResponseEntity.ok(likedUsers);
+    }
+
+    @PostMapping("/matched-users")
+    public ResponseEntity<List<AstroUser>> fetchMatchedUsers() {
+        Optional<AstroUser> principalUser = getPrincipalUser();
+
+        if (principalUser.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Optional<List<AstroUser>> optionalLikedUsers = astroUserService.getMatchedUsers(principalUser.get());
+
+        if(optionalLikedUsers.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+
+        List<AstroUser> likedUsers = optionalLikedUsers.get();
+
+        return ResponseEntity.ok(likedUsers);
+    }
+
     @PostMapping("/filter-search")
     public ResponseEntity<?> fetchUsersWithFilters(@RequestBody UserSearchRequest searchRequest) {
         List<AstroUser> users = astroUserService.findUsersWithFilters(searchRequest);

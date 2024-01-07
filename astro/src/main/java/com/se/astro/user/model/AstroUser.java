@@ -84,7 +84,6 @@ public class AstroUser implements UserDetails {
 
     public void createMatch(AstroUser user){
         this.matchedUsers.add(user.username);
-        user.matchedUsers.add(this.username);
     }
 
     @Override

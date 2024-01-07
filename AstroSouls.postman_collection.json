@@ -224,7 +224,7 @@
 			"response": []
 		},
 		{
-			"name": "MatchUser",
+			"name": "GetLikedUsers",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -238,7 +238,47 @@
 					}
 				},
 				"url": {
-					"raw": ""
+					"raw": "http://localhost:8080/api/users/liked-users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"users",
+						"liked-users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetMatchedUsers",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/users/matched-users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"users",
+						"matched-users"
+					]
 				}
 			},
 			"response": []

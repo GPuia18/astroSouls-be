@@ -24,8 +24,6 @@ public class AstroUserService {
     private final MongoTemplate mongoTemplate;
     private final AstroUserRepository astroUserRepository;
 
-
-
     public List<AstroUser> getAllUsers(){
         return astroUserRepository.findAll();
     }
@@ -34,14 +32,14 @@ public class AstroUserService {
         return astroUserRepository.findById(id);
     }
 
-    public Optional<AstroUser> getUserByUsername(String username) {
-        return astroUserRepository.findByUsername(username);
-    }
+    public Optional<AstroUser> getUserByUsername(String username) { return astroUserRepository.findByUsername(username); }
 
     public Optional<AstroUser> getUserByEmail(String email) {
         return astroUserRepository.findByEmail(email);
     }
 
+    public Optional<List<AstroUser>> getLikedUsers(AstroUser user){ return astroUserRepository.findAllByUsername(user.getLikedUsers());}
+    public Optional<List<AstroUser>> getMatchedUsers(AstroUser user){ return astroUserRepository.findAllByUsername(user.getMatchedUsers());}
     public List<AstroUser> findUsersWithFilters(UserSearchRequest searchRequest) {
         Query query = new Query();
 
@@ -84,7 +82,19 @@ public class AstroUserService {
         AstroUser userToLike = user.get();
         AstroUser userThatLikes = principalUser.get();
 
+        if(userThatLikes.getLikedUsers().contains(userToLike.getUsername())){
+            return;
+        }
+
         userThatLikes.likeUser(userToLike);
+
+        if(userToLike.getLikedUsers().contains(userThatLikes.getUsername())){
+            userThatLikes.createMatch(userToLike);
+            userToLike.createMatch(userThatLikes);
+
+            astroUserRepository.save(userToLike);
+            System.out.println(userToLike);
+        }
 
         astroUserRepository.save(userThatLikes);
     }

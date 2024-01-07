@@ -21,20 +21,20 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AuthenticationService {
 
-    private final AstroUserRepository repository;
+    private final AstroUserRepository astroUserRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(RegisterRequest request) {
 
-        Optional<AstroUser> userInRepo = repository.findByUsername(request.getUsername());
+        Optional<AstroUser> userInRepo = astroUserRepository.findByUsername(request.getUsername());
 
         if(userInRepo.isPresent()){
             return null;
         }
 
-        userInRepo = repository.findByEmail(request.getEmail());
+        userInRepo = astroUserRepository.findByEmail(request.getEmail());
 
         if(userInRepo.isPresent()){
             return null;
@@ -65,7 +65,7 @@ public class AuthenticationService {
                 .banned(false)
                 .build();
 
-        repository.save(user);
+        astroUserRepository.save(user);
 
         return createAuthenticationResponse(user);
     }
@@ -79,8 +79,8 @@ public class AuthenticationService {
                 )
         );
 
-        var user = repository.findByEmail(request.getUsername())
-                .or(() -> repository.findByUsername(request.getUsername()))
+        var user = astroUserRepository.findByEmail(request.getUsername())
+                .or(() -> astroUserRepository.findByUsername(request.getUsername()))
                 .orElseThrow();
 
         return createAuthenticationResponse(user);

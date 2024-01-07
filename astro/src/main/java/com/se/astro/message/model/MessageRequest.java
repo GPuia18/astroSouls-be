@@ -1,4 +1,4 @@
-package com.se.astro.authentication.model;
+package com.se.astro.message.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SearchRequest {
-    private String search;
+public class MessageRequest {
+    private String content;
+    private String receiverUsername;
 }

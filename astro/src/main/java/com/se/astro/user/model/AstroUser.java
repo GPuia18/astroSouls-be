@@ -1,5 +1,6 @@
 package com.se.astro.user.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.se.astro.user.model.enums.*;
 import lombok.*;
 import org.springframework.data.annotation.Id;
@@ -25,6 +26,7 @@ public class AstroUser implements UserDetails {
     @Id
     private String id;
     private String username;
+    @JsonIgnore
     private String password;
     @Indexed(unique = true)
     private String email;

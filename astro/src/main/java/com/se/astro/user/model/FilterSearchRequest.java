@@ -13,7 +13,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserSearchRequest {
+public class FilterSearchRequest {
     private Double minHeight;
     private Double maxHeight;
     private List<Tag> tags;

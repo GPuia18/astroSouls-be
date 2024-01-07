@@ -1,14 +1,12 @@
 package com.se.astro.user.controller;
 
-import com.se.astro.authentication.model.SearchRequest;
+import com.se.astro.user.model.SearchRequest;
+import com.se.astro.helper.UserPrincipalService;
 import com.se.astro.user.model.AstroUser;
-import com.se.astro.user.model.UserSearchRequest;
+import com.se.astro.user.model.FilterSearchRequest;
 import com.se.astro.user.service.AstroUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +18,7 @@ import java.util.Optional;
 @CrossOrigin(origins = "http://localhost:3000")
 public class AstroUserController {
     private final AstroUserService astroUserService;
+    private final UserPrincipalService userPrincipalService;
 
     @GetMapping
     public List<AstroUser> fetchAllUsers() {
@@ -51,7 +50,7 @@ public class AstroUserController {
 
     @PostMapping("/liked-users")
     public ResponseEntity<List<AstroUser>> fetchLikedUsers() {
-        Optional<AstroUser> principalUser = getPrincipalUser();
+        Optional<AstroUser> principalUser = userPrincipalService.getPrincipalUser();
 
         if (principalUser.isEmpty()) {
             return ResponseEntity.badRequest().build();
@@ -70,7 +69,7 @@ public class AstroUserController {
 
     @PostMapping("/matched-users")
     public ResponseEntity<List<AstroUser>> fetchMatchedUsers() {
-        Optional<AstroUser> principalUser = getPrincipalUser();
+        Optional<AstroUser> principalUser = userPrincipalService.getPrincipalUser();
 
         if (principalUser.isEmpty()) {
             return ResponseEntity.badRequest().build();
@@ -88,7 +87,7 @@ public class AstroUserController {
     }
 
     @PostMapping("/filter-search")
-    public ResponseEntity<?> fetchUsersWithFilters(@RequestBody UserSearchRequest searchRequest) {
+    public ResponseEntity<?> fetchUsersWithFilters(@RequestBody FilterSearchRequest searchRequest) {
         List<AstroUser> users = astroUserService.findUsersWithFilters(searchRequest);
         return ResponseEntity.ok(users);
     }
@@ -96,7 +95,7 @@ public class AstroUserController {
     @PostMapping("/like")
     public ResponseEntity<?> likeUserByUsernameOrEmail(@RequestBody SearchRequest likeRequest) {
 
-        Optional<AstroUser> principalUser = getPrincipalUser();
+        Optional<AstroUser> principalUser = userPrincipalService.getPrincipalUser();
 
         if (principalUser.isEmpty()) {
             return ResponseEntity.badRequest().build();
@@ -123,7 +122,7 @@ public class AstroUserController {
     @PostMapping("/match")
     public ResponseEntity<?> matchUserByUsernameOrEmail(@RequestBody SearchRequest matchRequest) {
 
-        Optional<AstroUser> principalUser = getPrincipalUser();
+        Optional<AstroUser> principalUser = userPrincipalService.getPrincipalUser();
 
         if (principalUser.isEmpty()) {
             return ResponseEntity.badRequest().build();
@@ -148,17 +147,5 @@ public class AstroUserController {
         } else {
             return ResponseEntity.notFound().build();
         }
-    }
-
-    private Optional<AstroUser> getPrincipalUser(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = null;
-
-        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            currentUsername = userDetails.getUsername();
-        }
-
-        return astroUserService.getUserByUsername(currentUsername);
     }
 }

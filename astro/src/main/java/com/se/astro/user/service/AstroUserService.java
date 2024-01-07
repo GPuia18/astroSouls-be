@@ -1,7 +1,7 @@
 package com.se.astro.user.service;
 
 import com.se.astro.user.model.AstroUser;
-import com.se.astro.user.model.UserSearchRequest;
+import com.se.astro.user.model.FilterSearchRequest;
 import com.se.astro.user.model.enums.Gender;
 import com.se.astro.user.model.enums.Tag;
 import com.se.astro.user.repository.AstroUserRepository;
@@ -40,7 +40,7 @@ public class AstroUserService {
 
     public Optional<List<AstroUser>> getLikedUsers(AstroUser user){ return astroUserRepository.findAllByUsername(user.getLikedUsers());}
     public Optional<List<AstroUser>> getMatchedUsers(AstroUser user){ return astroUserRepository.findAllByUsername(user.getMatchedUsers());}
-    public List<AstroUser> findUsersWithFilters(UserSearchRequest searchRequest) {
+    public List<AstroUser> findUsersWithFilters(FilterSearchRequest searchRequest) {
         Query query = new Query();
 
         if (searchRequest.getMinHeight() != null && searchRequest.getMaxHeight() != null) {

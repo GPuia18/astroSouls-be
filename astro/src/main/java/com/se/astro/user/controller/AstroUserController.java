@@ -88,7 +88,13 @@ public class AstroUserController {
 
     @PostMapping("/filter-search")
     public ResponseEntity<?> fetchUsersWithFilters(@RequestBody FilterSearchRequest searchRequest) {
-        List<AstroUser> users = astroUserService.findUsersWithFilters(searchRequest);
+        Optional<AstroUser> principalUser = userPrincipalService.getPrincipalUser();
+
+        if (principalUser.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        List<AstroUser> users = astroUserService.findUsersWithFilters(searchRequest, principalUser.get());
         return ResponseEntity.ok(users);
     }
 

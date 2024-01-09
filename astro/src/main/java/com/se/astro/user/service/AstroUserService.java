@@ -40,7 +40,7 @@ public class AstroUserService {
 
     public Optional<List<AstroUser>> getLikedUsers(AstroUser user){ return astroUserRepository.findAllByUsername(user.getLikedUsers());}
     public Optional<List<AstroUser>> getMatchedUsers(AstroUser user){ return astroUserRepository.findAllByUsername(user.getMatchedUsers());}
-    public List<AstroUser> findUsersWithFilters(FilterSearchRequest searchRequest) {
+    public List<AstroUser> findUsersWithFilters(FilterSearchRequest searchRequest, AstroUser principalUser) {
         Query query = new Query();
 
         if (searchRequest.getMinHeight() != null && searchRequest.getMaxHeight() != null) {
@@ -72,6 +72,12 @@ public class AstroUserService {
         }
         if (searchRequest.getZodiacSign() != null) {
             query.addCriteria(Criteria.where("zodiacSign").is(searchRequest.getZodiacSign()));
+        }
+
+        List<String> likedUsers = principalUser.getLikedUsers();
+        if (!likedUsers.isEmpty()) {
+            likedUsers.add(principalUser.getUsername());
+            query.addCriteria(Criteria.where("username").nin(likedUsers));
         }
 
         List<AstroUser> users = mongoTemplate.find(query, AstroUser.class);

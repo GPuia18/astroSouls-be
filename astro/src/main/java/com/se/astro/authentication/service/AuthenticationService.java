@@ -61,6 +61,7 @@ public class AuthenticationService {
                 .matchedUsers(new ArrayList<>())
                 .blockedUsers(new ArrayList<>())
                 .groups(new ArrayList<>())
+                .images(new ArrayList<>())
                 .banned(false)
                 .build();
 

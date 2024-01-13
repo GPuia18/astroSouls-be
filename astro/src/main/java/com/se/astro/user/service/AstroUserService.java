@@ -2,6 +2,7 @@ package com.se.astro.user.service;
 
 import com.se.astro.user.model.AstroUser;
 import com.se.astro.user.dto.FilterSearchRequest;
+import com.se.astro.user.model.enums.AccountType;
 import com.se.astro.user.model.enums.Gender;
 import com.se.astro.user.model.enums.Tag;
 import com.se.astro.user.repository.AstroUserRepository;
@@ -131,5 +132,13 @@ public class AstroUserService {
         userToBlock.setBanned(true);
 
         astroUserRepository.save(userToBlock);
+    }
+
+    public void changeUserAccountType(Optional<AstroUser> user, AccountType accountType) {
+        AstroUser userToChange = user.get();
+
+        userToChange.setAccountType(accountType);
+
+        astroUserRepository.save(userToChange);
     }
 }

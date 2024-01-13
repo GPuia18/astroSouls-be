@@ -408,6 +408,36 @@
 			"response": []
 		},
 		{
+			"name": "SendMessageWithImage",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"content\":\"cf\",    \r\n    \"receiverUsername\":\"test\",\r\n    \"image\": \"abc.png\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/message/send-with-image",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"message",
+						"send-with-image"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "GetAllMessagesBetweenUsers",
 			"request": {
 				"method": "POST",
@@ -491,7 +521,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0IiwiaWF0IjoxNzA1MTcxMjM0LCJleHAiOjE3MDUyNTc2MzR9.lQpPqV7KPUk8M_zTrd_9xHurZAcUps3vBDwJI2InYiY",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYWR1IiwiaWF0IjoxNzA1MTc1MTI1LCJleHAiOjE3MDUyNjE1MjV9.Zk-AC85CFcyAWMurA5AA6YCU6sKhfxHT-MoJNsyKz1k",
 							"type": "string"
 						}
 					]
@@ -508,7 +538,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/product/all",
+					"raw": "http://localhost:8080/api/product",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -516,8 +546,7 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"product",
-						"all"
+						"product"
 					]
 				}
 			},
@@ -638,6 +667,128 @@
 						"api",
 						"product",
 						"delete"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllZodiacs",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0IiwiaWF0IjoxNzA1MTcxMjM0LCJleHAiOjE3MDUyNTc2MzR9.lQpPqV7KPUk8M_zTrd_9xHurZAcUps3vBDwJI2InYiY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/zodiac",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"zodiac"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetZodiacCompatibility",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYWR1IiwiaWF0IjoxNzA1MTc1NDMyLCJleHAiOjE3MDUyNjE4MzJ9.KIxeSVpwJ_PWOZWzNbSuGVFc2jMGt9IIy-Y7HPFHYBw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"zodiac1\": \"Aries\",\r\n    \"zodiac2\": \"Pisces\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/zodiac/compatibility",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"zodiac",
+						"compatibility"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ChangeAccountType",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYWR1IiwiaWF0IjoxNzA1MTc1NDMyLCJleHAiOjE3MDUyNjE4MzJ9.KIxeSVpwJ_PWOZWzNbSuGVFc2jMGt9IIy-Y7HPFHYBw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"accountType\": \"BRONZE\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/zodiac/account-type",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"zodiac",
+						"account-type"
 					]
 				}
 			},

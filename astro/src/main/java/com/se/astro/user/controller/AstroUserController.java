@@ -1,5 +1,6 @@
 package com.se.astro.user.controller;
 
+import com.se.astro.user.dto.AccountTypeRequest;
 import com.se.astro.user.dto.SearchRequest;
 import com.se.astro.helper.UserPrincipalService;
 import com.se.astro.user.model.AstroUser;
@@ -90,6 +91,7 @@ public class AstroUserController {
     }
 
     @PostMapping("/filter-search")
+    @PreAuthorize("hasAnyAuthority('ROLE_SILVER', 'ROLE_GOLD', 'ROLE_ADMIN')")
     public ResponseEntity<?> fetchUsersWithFilters(@RequestBody FilterSearchRequest searchRequest) {
         Optional<AstroUser> principalUser = userPrincipalService.getPrincipalUser();
 
@@ -181,6 +183,26 @@ public class AstroUserController {
 
             return ResponseEntity.ok().build();
         } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping("/account-type")
+    public ResponseEntity<?> setUserAccountType(@RequestBody AccountTypeRequest accountTypeRequest) {
+
+        Optional<AstroUser> principalUser = userPrincipalService.getPrincipalUser();
+
+        if (principalUser.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        try {
+            AccountType accountType = AccountType.valueOf(accountTypeRequest.getAccountType());
+
+            astroUserService.changeUserAccountType(principalUser, accountType);
+
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }

@@ -1,4 +1,4 @@
-package com.se.astro.user.model;
+package com.se.astro.group.model;
 
 import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;

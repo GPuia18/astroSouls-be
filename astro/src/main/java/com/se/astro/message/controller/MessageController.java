@@ -52,6 +52,7 @@ public class MessageController {
     }
 
     @PostMapping("/send-with-image")
+    @PreAuthorize("hasAnyAuthority('ROLE_BRONZE', 'ROLE_SILVER', 'ROLE_GOLD', 'ROLE_ADMIN')")
     public ResponseEntity<AstroUser> sendMessageWithImageToUserByUsernameOrEmail(@RequestBody MessageRequestWithImage messageRequest) {
         Optional<AstroUser> principalUser = userPrincipalService.getPrincipalUser();
 

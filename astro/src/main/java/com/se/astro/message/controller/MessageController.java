@@ -76,17 +76,17 @@ public class MessageController {
     }
 
     @GetMapping("/all-user-messages")
-    public ResponseEntity<UserMessages> getAllMessagesOfUser() {
+    public ResponseEntity<List<UserMessages>> getAllMessagesOfUser() {
         Optional<AstroUser> principalUser = userPrincipalService.getPrincipalUser();
 
         if (principalUser.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
 
-        Optional<UserMessages> messages = messageService.getAllMessagesOfUser(principalUser.get());
+        List<UserMessages> messages = messageService.getAllMessagesOfUser(principalUser.get());
 
-        if (messages.isPresent()) {
-            return ResponseEntity.ok(messages.get());
+        if (!messages.isEmpty()) {
+            return ResponseEntity.ok(messages);
         }
 
         return ResponseEntity.notFound().build();

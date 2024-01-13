@@ -9,8 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,12 +35,25 @@ public class MessageService {
         return messageRepository.findAllByUsers(user1.getUsername(), user2.getUsername());
     }
 
-    public Optional<UserMessages> getAllMessagesOfUser(AstroUser user) {
-        Optional<List<Message>> messages = messageRepository.findAllByUser(user.getUsername());
-        if (messages.isPresent()) {
-            return Optional.of(new UserMessages(user.getUsername(), messages.get()));
-        } else {
-            return Optional.empty();
+    public List<UserMessages> getAllMessagesOfUser(AstroUser user) {
+        Optional<List<Message>> messagesOpt = messageRepository.findAllByUser(user.getUsername());
+        if (!messagesOpt.isPresent()) {
+            return Collections.emptyList();
         }
+
+        List<Message> messages = messagesOpt.get();
+        Map<String, List<Message>> messagesByOtherUser = new HashMap<>();
+
+        for (Message message : messages) {
+            String otherUsername = message.getSenderUsername().equals(user.getUsername())
+                    ? message.getReceiverUsername() : message.getSenderUsername();
+
+            messagesByOtherUser.computeIfAbsent(otherUsername, k -> new ArrayList<>()).add(message);
+        }
+
+        return messagesByOtherUser.entrySet().stream()
+                .map(entry -> new UserMessages(entry.getKey(), entry.getValue()))
+                .collect(Collectors.toList());
     }
+
 }

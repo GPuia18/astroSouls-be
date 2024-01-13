@@ -22,8 +22,6 @@ public class ZodiacService {
     }
 
     public Optional<ZodiacCompatibility> getCompatibilityBetween(String zodiacSign1, String zodiacSign2) {
-        Optional<ZodiacCompatibility> c = compatibilityRepository.findCompatibilityBetween(zodiacSign1, zodiacSign2);
-        System.out.println(c.get());
-        return c;
+        return compatibilityRepository.findCompatibilityBetween(zodiacSign1, zodiacSign2);
     }
 }

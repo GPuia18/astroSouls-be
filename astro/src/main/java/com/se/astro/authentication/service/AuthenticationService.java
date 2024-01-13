@@ -1,8 +1,8 @@
 package com.se.astro.authentication.service;
 
-import com.se.astro.authentication.model.AuthenticationRequest;
-import com.se.astro.authentication.model.AuthenticationResponse;
-import com.se.astro.authentication.model.RegisterRequest;
+import com.se.astro.authentication.dto.AuthenticationRequest;
+import com.se.astro.authentication.dto.AuthenticationResponse;
+import com.se.astro.authentication.dto.RegisterRequest;
 import com.se.astro.config.JwtService;
 import com.se.astro.user.model.AstroUser;
 import com.se.astro.user.model.enums.AccountType;
@@ -30,13 +30,13 @@ public class AuthenticationService {
 
         Optional<AstroUser> userInRepo = astroUserRepository.findByUsername(request.getUsername());
 
-        if(userInRepo.isPresent()){
+        if (userInRepo.isPresent()) {
             return null;
         }
 
         userInRepo = astroUserRepository.findByEmail(request.getEmail());
 
-        if(userInRepo.isPresent()){
+        if (userInRepo.isPresent()) {
             return null;
         }
 
@@ -86,7 +86,7 @@ public class AuthenticationService {
         return createAuthenticationResponse(user);
     }
 
-    private AuthenticationResponse createAuthenticationResponse(UserDetails user){
+    private AuthenticationResponse createAuthenticationResponse(UserDetails user) {
         var jwtToken = jwtService.generateToken(user);
 
         return AuthenticationResponse.builder()

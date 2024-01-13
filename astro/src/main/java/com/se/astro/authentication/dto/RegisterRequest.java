@@ -1,4 +1,4 @@
-package com.se.astro.authentication.model;
+package com.se.astro.authentication.dto;
 
 import com.se.astro.user.model.enums.Gender;
 import com.se.astro.user.model.enums.Language;
@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.mongodb.core.index.Indexed;
 
 import java.time.LocalDateTime;
 import java.util.List;

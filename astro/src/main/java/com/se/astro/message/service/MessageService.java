@@ -1,11 +1,10 @@
 package com.se.astro.message.service;
 
-import com.se.astro.message.model.Message;
-import com.se.astro.message.model.MessageRequest;
-import com.se.astro.message.model.MessagesBetweenUsersRequest;
+import com.se.astro.message.dto.Message;
+import com.se.astro.message.dto.MessageRequest;
+import com.se.astro.message.dto.UserMessages;
 import com.se.astro.message.repository.MessageRepository;
 import com.se.astro.user.model.AstroUser;
-import com.se.astro.user.repository.AstroUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -34,5 +33,14 @@ public class MessageService {
 
     public Optional<List<Message>> getMessagesBetweenUsers(AstroUser user1, AstroUser user2) {
         return messageRepository.findAllByUsers(user1.getUsername(), user2.getUsername());
+    }
+
+    public Optional<UserMessages> getAllMessagesOfUser(AstroUser user) {
+        Optional<List<Message>> messages = messageRepository.findAllByUser(user.getUsername());
+        if (messages.isPresent()) {
+            return Optional.of(new UserMessages(user.getUsername(), messages.get()));
+        } else {
+            return Optional.empty();
+        }
     }
 }

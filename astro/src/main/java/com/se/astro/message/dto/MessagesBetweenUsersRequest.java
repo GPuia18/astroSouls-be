@@ -1,4 +1,4 @@
-package com.se.astro.message.model;
+package com.se.astro.message.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MessageRequest {
-    private String content;
-    private String receiverUsername;
+public class MessagesBetweenUsersRequest {
+    private String username;
 }

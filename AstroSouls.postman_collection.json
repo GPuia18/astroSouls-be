@@ -77,7 +77,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYW1wbGVVc2VyIiwiaWF0IjoxNzA0NjM5OTkzLCJleHAiOjE3MDQ2NDM1OTN9.F9-FGcH8UR1Mh38hkDHS_gtCMr77NSt1fm1VplGQW3Q",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0IiwiaWF0IjoxNzA0NjU3NzI4LCJleHAiOjE3MDQ2NjEzMjh9.P2cZXcxtX0zBiWfeaHoJ5t1b8MF23aSvbxhXEEe9mFs",
 							"type": "string"
 						}
 					]
@@ -86,7 +86,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"search\": \"sampleUser\"\r\n}\r\n",
+					"raw": "{\r\n    \"search\": \"test\"\r\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -131,7 +131,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWEiLCJpYXQiOjE3MDQ0ODIyNzUsImV4cCI6MTcwNDQ4NTg3NX0.fqxJIcBd_q0QfIqlJjl8qTqdOpYfmzEPrM3Tf9pLdow",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYWR1IiwiaWF0IjoxNzA0NjY0ODUwLCJleHAiOjE3MDQ2Njg0NTB9.3OOKq5JIjyfHopXudN6weM-DA8SjqR547CUdoWy0GiE",
 							"type": "string"
 						}
 					]
@@ -197,11 +197,14 @@
 		{
 			"name": "Authenticate",
 			"request": {
+				"auth": {
+					"type": "noauth"
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"sampleUser\",\r\n    \"password\": \"yourSecurePassword\"\r\n}",
+					"raw": "{\r\n    \"username\": \"Test\",\r\n    \"password\": \"yourSecurePassword\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -249,6 +252,66 @@
 						"api",
 						"users",
 						"like"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BlockUser",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"search\": \"sampleUser\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/users/block",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"users",
+						"block"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BanUser",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"search\": \"sampleUser\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/users/ban",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"users",
+						"ban"
 					]
 				}
 			},
@@ -369,6 +432,49 @@
 						"api",
 						"message",
 						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllMessagesOfUser",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0IiwiaWF0IjoxNzA1MTcxMjM0LCJleHAiOjE3MDUyNTc2MzR9.lQpPqV7KPUk8M_zTrd_9xHurZAcUps3vBDwJI2InYiY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/message/all-user-messages",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"message",
+						"all-user-messages"
 					]
 				}
 			},

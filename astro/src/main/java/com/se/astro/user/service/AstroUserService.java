@@ -1,7 +1,7 @@
 package com.se.astro.user.service;
 
 import com.se.astro.user.model.AstroUser;
-import com.se.astro.user.model.FilterSearchRequest;
+import com.se.astro.user.dto.FilterSearchRequest;
 import com.se.astro.user.model.enums.Gender;
 import com.se.astro.user.model.enums.Tag;
 import com.se.astro.user.repository.AstroUserRepository;
@@ -24,7 +24,7 @@ public class AstroUserService {
     private final MongoTemplate mongoTemplate;
     private final AstroUserRepository astroUserRepository;
 
-    public List<AstroUser> getAllUsers(){
+    public List<AstroUser> getAllUsers() {
         return astroUserRepository.findAll();
     }
 
@@ -32,14 +32,22 @@ public class AstroUserService {
         return astroUserRepository.findById(id);
     }
 
-    public Optional<AstroUser> getUserByUsername(String username) { return astroUserRepository.findByUsername(username); }
+    public Optional<AstroUser> getUserByUsername(String username) {
+        return astroUserRepository.findByUsername(username);
+    }
 
     public Optional<AstroUser> getUserByEmail(String email) {
         return astroUserRepository.findByEmail(email);
     }
 
-    public Optional<List<AstroUser>> getLikedUsers(AstroUser user){ return astroUserRepository.findAllByUsername(user.getLikedUsers());}
-    public Optional<List<AstroUser>> getMatchedUsers(AstroUser user){ return astroUserRepository.findAllByUsername(user.getMatchedUsers());}
+    public Optional<List<AstroUser>> getLikedUsers(AstroUser user) {
+        return astroUserRepository.findAllByUsername(user.getLikedUsers());
+    }
+
+    public Optional<List<AstroUser>> getMatchedUsers(AstroUser user) {
+        return astroUserRepository.findAllByUsername(user.getMatchedUsers());
+    }
+
     public List<AstroUser> findUsersWithFilters(FilterSearchRequest searchRequest, AstroUser principalUser) {
         Query query = new Query();
 
@@ -88,13 +96,13 @@ public class AstroUserService {
         AstroUser userToLike = user.get();
         AstroUser userThatLikes = principalUser.get();
 
-        if(userThatLikes.getLikedUsers().contains(userToLike.getUsername())){
+        if (userThatLikes.getLikedUsers().contains(userToLike.getUsername())) {
             return;
         }
 
         userThatLikes.likeUser(userToLike);
 
-        if(userToLike.getLikedUsers().contains(userThatLikes.getUsername())){
+        if (userToLike.getLikedUsers().contains(userThatLikes.getUsername())) {
             userThatLikes.createMatch(userToLike);
             userToLike.createMatch(userThatLikes);
 
@@ -108,12 +116,20 @@ public class AstroUserService {
         AstroUser userToBlock = user.get();
         AstroUser userThatBlocks = principalUser.get();
 
-        if(userThatBlocks.getBlockedUsers().contains(userToBlock.getUsername())){
+        if (userThatBlocks.getBlockedUsers().contains(userToBlock.getUsername())) {
             return;
         }
 
         userThatBlocks.blockUser(userToBlock);
 
         astroUserRepository.save(userThatBlocks);
+    }
+
+    public void banUser(Optional<AstroUser> user) {
+        AstroUser userToBlock = user.get();
+
+        userToBlock.setBanned(true);
+
+        astroUserRepository.save(userToBlock);
     }
 }

@@ -1,4 +1,4 @@
-package com.se.astro.user.model;
+package com.se.astro.user.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

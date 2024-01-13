@@ -17,6 +17,13 @@ public class UserPrincipalService {
         this.astroUserService = astroUserService;
     }
 
+    public boolean isCurrentUserNotBanned() {
+        return getPrincipalUser()
+                .map(AstroUser::isBanned)
+                .map(banned -> !banned)
+                .orElse(false);
+    }
+
     public Optional<AstroUser> getPrincipalUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = null;

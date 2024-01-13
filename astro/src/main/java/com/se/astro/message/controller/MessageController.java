@@ -1,25 +1,26 @@
 package com.se.astro.message.controller;
 
-import com.se.astro.message.model.Message;
-import com.se.astro.message.model.MessageRequest;
-import com.se.astro.message.model.MessagesBetweenUsersRequest;
+import com.se.astro.message.dto.Message;
+import com.se.astro.message.dto.MessageRequest;
+import com.se.astro.message.dto.MessagesBetweenUsersRequest;
+import com.se.astro.message.dto.UserMessages;
 import com.se.astro.message.service.MessageService;
-import com.se.astro.user.model.SearchRequest;
 import com.se.astro.helper.UserPrincipalService;
 import com.se.astro.user.model.AstroUser;
 import com.se.astro.user.service.AstroUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.OptionalInt;
 
 @RestController
 @RequestMapping("api/message")
 @AllArgsConstructor
 @CrossOrigin(origins = "http://localhost:3000")
+@PreAuthorize("@userPrincipalService.isCurrentUserNotBanned()")
 public class MessageController {
 
     private final UserPrincipalService userPrincipalService;
@@ -50,7 +51,7 @@ public class MessageController {
     }
 
     @PostMapping("/all")
-    public ResponseEntity<List<Message>> sendMessageToUserByUsernameOrEmail(@RequestBody MessagesBetweenUsersRequest messagesBetweenUsersRequest) {
+    public ResponseEntity<List<Message>> getMessagesBetweenUsers(@RequestBody MessagesBetweenUsersRequest messagesBetweenUsersRequest) {
         Optional<AstroUser> principalUser = userPrincipalService.getPrincipalUser();
 
         if (principalUser.isEmpty()) {
@@ -69,6 +70,23 @@ public class MessageController {
             if (messages.isPresent()) {
                 return ResponseEntity.ok(messages.get());
             }
+        }
+
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/all-user-messages")
+    public ResponseEntity<UserMessages> getAllMessagesOfUser() {
+        Optional<AstroUser> principalUser = userPrincipalService.getPrincipalUser();
+
+        if (principalUser.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Optional<UserMessages> messages = messageService.getAllMessagesOfUser(principalUser.get());
+
+        if (messages.isPresent()) {
+            return ResponseEntity.ok(messages.get());
         }
 
         return ResponseEntity.notFound().build();

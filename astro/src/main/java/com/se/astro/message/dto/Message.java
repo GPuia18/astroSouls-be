@@ -1,4 +1,4 @@
-package com.se.astro.message.model;
+package com.se.astro.message.dto;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;

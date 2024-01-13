@@ -1,4 +1,4 @@
-package com.se.astro.user.model;
+package com.se.astro.user.dto;
 
 import com.se.astro.user.model.enums.Gender;
 import com.se.astro.user.model.enums.Tag;

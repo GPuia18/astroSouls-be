@@ -1,12 +1,14 @@
 package com.se.astro.user.controller;
 
-import com.se.astro.user.model.SearchRequest;
+import com.se.astro.user.dto.SearchRequest;
 import com.se.astro.helper.UserPrincipalService;
 import com.se.astro.user.model.AstroUser;
-import com.se.astro.user.model.FilterSearchRequest;
+import com.se.astro.user.dto.FilterSearchRequest;
+import com.se.astro.user.model.enums.AccountType;
 import com.se.astro.user.service.AstroUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.Optional;
 @RequestMapping("api/users")
 @AllArgsConstructor
 @CrossOrigin(origins = "http://localhost:3000")
+@PreAuthorize("@userPrincipalService.isCurrentUserNotBanned()")
 public class AstroUserController {
     private final AstroUserService astroUserService;
     private final UserPrincipalService userPrincipalService;
@@ -40,7 +43,7 @@ public class AstroUserController {
 
         if (searchRequest != null) {
             user = astroUserService.getUserByUsername(searchRequest.getSearch());
-            if(user.isEmpty()) {
+            if (user.isEmpty()) {
                 user = astroUserService.getUserByEmail(searchRequest.getSearch());
             }
         }
@@ -58,7 +61,7 @@ public class AstroUserController {
 
         Optional<List<AstroUser>> optionalLikedUsers = astroUserService.getLikedUsers(principalUser.get());
 
-        if(optionalLikedUsers.isEmpty()){
+        if (optionalLikedUsers.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
@@ -77,7 +80,7 @@ public class AstroUserController {
 
         Optional<List<AstroUser>> optionalLikedUsers = astroUserService.getMatchedUsers(principalUser.get());
 
-        if(optionalLikedUsers.isEmpty()){
+        if (optionalLikedUsers.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
@@ -152,9 +155,9 @@ public class AstroUserController {
         }
     }
 
-
-    @PostMapping("/match")
-    public ResponseEntity<?> matchUserByUsernameOrEmail(@RequestBody SearchRequest matchRequest) {
+    @PostMapping("/ban")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<?> banUserByUsernameOrEmail(@RequestBody SearchRequest banRequest) {
 
         Optional<AstroUser> principalUser = userPrincipalService.getPrincipalUser();
 
@@ -163,19 +166,18 @@ public class AstroUserController {
         }
 
         Optional<AstroUser> user = Optional.empty();
-        if (matchRequest != null) {
-            user = astroUserService.getUserByUsername(matchRequest.getSearch());
+        if (banRequest != null) {
+            user = astroUserService.getUserByUsername(banRequest.getSearch());
             if (user.isEmpty()) {
-                user = astroUserService.getUserByEmail(matchRequest.getSearch());
+                user = astroUserService.getUserByEmail(banRequest.getSearch());
             }
         }
 
         if (user.isPresent()) {
 
-            AstroUser user1 = user.get();
-            AstroUser user2 = principalUser.get();
-
-            user1.createMatch(user2);
+            if (user.get().getAccountType() != AccountType.ADMIN) {
+                astroUserService.banUser(user);
+            }
 
             return ResponseEntity.ok().build();
         } else {

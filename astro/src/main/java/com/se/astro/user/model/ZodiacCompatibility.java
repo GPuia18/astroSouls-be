@@ -12,4 +12,10 @@ public class ZodiacCompatibility {
     private String zodiacName1;
     private String zodiacName2;
     private int compatibility;
+
+    public ZodiacCompatibility(String zodiacName1, String zodiacName2, int compatibility) {
+        this.zodiacName1 = zodiacName1;
+        this.zodiacName2 = zodiacName2;
+        this.compatibility = compatibility;
+    }
 }

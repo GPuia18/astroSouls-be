@@ -1,5 +1,7 @@
 package com.se.astro.message.dto;
 
+import com.se.astro.message.model.Message;
+
 import java.util.List;
 
 public class UserMessages {

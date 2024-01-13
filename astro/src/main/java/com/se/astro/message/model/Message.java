@@ -1,4 +1,4 @@
-package com.se.astro.message.dto;
+package com.se.astro.message.model;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;
@@ -20,4 +20,5 @@ public class Message {
     private String content;
     private String senderUsername;
     private String receiverUsername;
+    private String image;
 }

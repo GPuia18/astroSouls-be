@@ -1,6 +1,7 @@
 package com.se.astro.message.service;
 
-import com.se.astro.message.dto.Message;
+import com.se.astro.message.dto.MessageRequestWithImage;
+import com.se.astro.message.model.Message;
 import com.se.astro.message.dto.MessageRequest;
 import com.se.astro.message.dto.UserMessages;
 import com.se.astro.message.repository.MessageRepository;
@@ -24,6 +25,20 @@ public class MessageService {
                 .senderUsername(principalUser.getUsername())
                 .receiverUsername(request.getReceiverUsername())
                 .sendingTime(LocalDateTime.now())
+                .build();
+
+        messageRepository.save(message);
+
+        return message;
+    }
+
+    public Message sendMessageWithImage(MessageRequestWithImage request, AstroUser principalUser) {
+        var message = Message.builder()
+                .content(request.getContent())
+                .senderUsername(principalUser.getUsername())
+                .receiverUsername(request.getReceiverUsername())
+                .sendingTime(LocalDateTime.now())
+                .image(request.getImage())
                 .build();
 
         messageRepository.save(message);

@@ -1,6 +1,6 @@
 package com.se.astro.message.repository;
 
-import com.se.astro.message.dto.Message;
+import com.se.astro.message.model.Message;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 

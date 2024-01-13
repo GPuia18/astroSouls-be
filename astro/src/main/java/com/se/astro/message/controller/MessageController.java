@@ -1,6 +1,7 @@
 package com.se.astro.message.controller;
 
-import com.se.astro.message.dto.Message;
+import com.se.astro.message.dto.MessageRequestWithImage;
+import com.se.astro.message.model.Message;
 import com.se.astro.message.dto.MessageRequest;
 import com.se.astro.message.dto.MessagesBetweenUsersRequest;
 import com.se.astro.message.dto.UserMessages;
@@ -43,6 +44,29 @@ public class MessageController {
         if (user.isPresent()) {
 
             messageService.sendMessage(messageRequest, principalUser.get());
+
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping("/send-with-image")
+    public ResponseEntity<AstroUser> sendMessageWithImageToUserByUsernameOrEmail(@RequestBody MessageRequestWithImage messageRequest) {
+        Optional<AstroUser> principalUser = userPrincipalService.getPrincipalUser();
+
+        if (principalUser.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Optional<AstroUser> user = Optional.empty();
+        if (messageRequest != null) {
+            user = astroUserService.getUserByUsername(messageRequest.getReceiverUsername());
+        }
+
+        if (user.isPresent()) {
+
+            messageService.sendMessageWithImage(messageRequest, principalUser.get());
 
             return ResponseEntity.ok().build();
         } else {

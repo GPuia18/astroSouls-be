@@ -3,6 +3,7 @@ package com.se.astro.user.controller;
 import com.se.astro.user.dto.AccountTypeRequest;
 import com.se.astro.user.dto.SearchRequest;
 import com.se.astro.helper.UserPrincipalService;
+import com.se.astro.user.dto.UserCompatibility;
 import com.se.astro.user.model.AstroUser;
 import com.se.astro.user.dto.FilterSearchRequest;
 import com.se.astro.user.model.enums.AccountType;
@@ -215,8 +216,8 @@ public class AstroUserController {
             return ResponseEntity.badRequest().build();
         }
 
-        List<AstroUser> users = astroUserService.findCompatibleUsers(principalUser.get());
-        
+        List<UserCompatibility> users = astroUserService.findCompatibleUsers(principalUser.get());
+
         return ResponseEntity.ok(users);
     }
 }

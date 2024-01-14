@@ -1,5 +1,6 @@
 package com.se.astro.user.service;
 
+import com.se.astro.user.dto.UserCompatibility;
 import com.se.astro.user.model.AstroUser;
 import com.se.astro.user.dto.FilterSearchRequest;
 import com.se.astro.user.model.ZodiacCompatibility;
@@ -54,7 +55,7 @@ public class AstroUserService {
         return astroUserRepository.findAllByUsername(user.getMatchedUsers());
     }
 
-    public List<AstroUser> findCompatibleUsers(AstroUser principalUser) {
+    public List<UserCompatibility> findCompatibleUsers(AstroUser principalUser) {
         String zodiacSign = principalUser.getZodiacSign();
         List<Language> languages = principalUser.getLanguage();
         List<Gender> genderList = principalUser.getSearchingFor();
@@ -87,7 +88,12 @@ public class AstroUserService {
                 })
                 .collect(Collectors.toList());
 
-        return users;
+        return astroUserList.stream()
+                .map(user -> {
+                    int score = getCompatibilityScore(user.getZodiacSign(), zodiacCompatibilities);
+                    return new UserCompatibility(user, score);
+                })
+                .collect(Collectors.toList());
     }
 
     private int getCompatibilityScore(String zodiacSign, List<ZodiacCompatibility> compatibilities) {

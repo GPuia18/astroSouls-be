@@ -88,9 +88,11 @@ public class AuthenticationService {
 
     private AuthenticationResponse createAuthenticationResponse(UserDetails user) {
         var jwtToken = jwtService.generateToken(user);
+        Optional<AstroUser> astroUser = astroUserRepository.findByUsername(user.getUsername());
 
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .astroUser(astroUser.get())
                 .build();
     }
 

@@ -2,10 +2,13 @@ package com.se.astro.user.service;
 
 import com.se.astro.user.model.AstroUser;
 import com.se.astro.user.dto.FilterSearchRequest;
+import com.se.astro.user.model.ZodiacCompatibility;
 import com.se.astro.user.model.enums.AccountType;
 import com.se.astro.user.model.enums.Gender;
+import com.se.astro.user.model.enums.Language;
 import com.se.astro.user.model.enums.Tag;
 import com.se.astro.user.repository.AstroUserRepository;
+import com.se.astro.user.repository.ZodiacCompatibilityRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -17,6 +20,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -24,6 +28,7 @@ public class AstroUserService {
 
     private final MongoTemplate mongoTemplate;
     private final AstroUserRepository astroUserRepository;
+    private final ZodiacService zodiacService;
 
     public List<AstroUser> getAllUsers() {
         return astroUserRepository.findAll();
@@ -47,6 +52,50 @@ public class AstroUserService {
 
     public Optional<List<AstroUser>> getMatchedUsers(AstroUser user) {
         return astroUserRepository.findAllByUsername(user.getMatchedUsers());
+    }
+
+    public List<AstroUser> findCompatibleUsers(AstroUser principalUser) {
+        String zodiacSign = principalUser.getZodiacSign();
+        List<Language> languages = principalUser.getLanguage();
+        List<Gender> genderList = principalUser.getSearchingFor();
+
+        Optional<List<ZodiacCompatibility>> optionalZodiacCompatibilities = zodiacService.findCompatibilitiesByZodiacName(zodiacSign);
+
+        if (optionalZodiacCompatibilities.isEmpty()) {
+            return List.of();
+        }
+
+        List<ZodiacCompatibility> zodiacCompatibilities = optionalZodiacCompatibilities.get();
+
+        List<String> compatibleZodiacs = zodiacCompatibilities.stream()
+                .map(zc -> zodiacSign.equals(zc.getZodiacName1()) ? zc.getZodiacName2() : zc.getZodiacName1())
+                .collect(Collectors.toList());
+
+        List<AstroUser> users = astroUserRepository.findAllByLanguageAndGender(
+                languages.stream().map(Language::name).collect(Collectors.toList()),
+                genderList.stream().map(Gender::name).collect(Collectors.toList()));
+
+        List<AstroUser> astroUserList = users.stream()
+                .filter(user -> !user.getUsername().equals(principalUser.getUsername()))
+                .filter(user -> compatibleZodiacs.contains(user.getZodiacSign()))
+                .filter(user -> user.getSearchingFor() != null && user.getSearchingFor().contains(principalUser.getGender()))
+                .filter(user -> user.getLikedUsers() != null && !user.getLikedUsers().contains(principalUser.getUsername()))
+                .sorted((u1, u2) -> {
+                    int score1 = getCompatibilityScore(u1.getZodiacSign(), zodiacCompatibilities);
+                    int score2 = getCompatibilityScore(u2.getZodiacSign(), zodiacCompatibilities);
+                    return Integer.compare(score2, score1);
+                })
+                .collect(Collectors.toList());
+
+        return users;
+    }
+
+    private int getCompatibilityScore(String zodiacSign, List<ZodiacCompatibility> compatibilities) {
+        return compatibilities.stream()
+                .filter(zc -> zc.getZodiacName1().equals(zodiacSign) || zc.getZodiacName2().equals(zodiacSign))
+                .findFirst()
+                .map(ZodiacCompatibility::getCompatibility)
+                .orElse(0);
     }
 
     public List<AstroUser> findUsersWithFilters(FilterSearchRequest searchRequest, AstroUser principalUser) {

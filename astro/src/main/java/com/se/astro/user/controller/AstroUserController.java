@@ -206,4 +206,17 @@ public class AstroUserController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/compatible-users")
+    public ResponseEntity<?> fetchCompatibleUsers() {
+        Optional<AstroUser> principalUser = userPrincipalService.getPrincipalUser();
+
+        if (principalUser.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        List<AstroUser> users = astroUserService.findCompatibleUsers(principalUser.get());
+        
+        return ResponseEntity.ok(users);
+    }
 }

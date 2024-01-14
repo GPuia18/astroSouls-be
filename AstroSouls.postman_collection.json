@@ -46,7 +46,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYW1wbGVVc2VyIiwiaWF0IjoxNzA0NTkwNTkxLCJleHAiOjE3MDQ1OTQxOTF9.jH8aKynTb-kalqdVvYbI12CNX0xvGoeT6Ph5C2SqAHY",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYWR1IiwiaWF0IjoxNzA1MTk4NjI0LCJleHAiOjE3MDUyODUwMjR9.cShi_6UiFKgF3e6mCdNeXD2DHpkXVL06mh-9Ug_UlJI",
 							"type": "string"
 						}
 					]
@@ -54,7 +54,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/users/6596fbd74e875a578329b651",
+					"raw": "http://localhost:8080/api/users",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -62,8 +62,7 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"users",
-						"6596fbd74e875a578329b651"
+						"users"
 					]
 				}
 			},
@@ -158,6 +157,64 @@
 						"api",
 						"users",
 						"filter-search"
+					]
+				},
+				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+			},
+			"response": []
+		},
+		{
+			"name": "CompatibleUsers",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYWR1IiwiaWF0IjoxNzA0NjY0ODUwLCJleHAiOjE3MDQ2Njg0NTB9.3OOKq5JIjyfHopXudN6weM-DA8SjqR547CUdoWy0GiE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"height\": 1.79,\n    \"minAge\": 21,\n    \"maxAge\": 21,\n    \"lookingFor\": [\"FEMALE\"],\n    \"zodiacSign\": \"Aquarius\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/users/compatible-users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"users",
+						"compatible-users"
 					]
 				},
 				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."

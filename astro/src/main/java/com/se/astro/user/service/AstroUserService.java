@@ -182,9 +182,13 @@ public class AstroUserService {
             return;
         }
 
+        userThatBlocks.getMatchedUsers().remove(userToBlock.getUsername());
+        userToBlock.getMatchedUsers().remove(userThatBlocks.getUsername());
+
         userThatBlocks.blockUser(userToBlock);
 
         astroUserRepository.save(userThatBlocks);
+        astroUserRepository.save(userToBlock);
     }
 
     public void banUser(Optional<AstroUser> user) {

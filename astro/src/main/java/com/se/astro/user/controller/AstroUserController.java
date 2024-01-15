@@ -132,9 +132,11 @@ public class AstroUserController {
 
         if (user.isPresent()) {
 
-            astroUserService.likeUser(user, principalUser);
+            boolean match = astroUserService.likeUser(user, principalUser);
 
-            return ResponseEntity.ok().build();
+            LikeUserResponse likeUserResponse = LikeUserResponse.builder().message((match) ? "Match" : "No Match").build();
+
+            return ResponseEntity.ok(likeUserResponse);
         } else {
             return ResponseEntity.notFound().build();
         }

@@ -150,12 +150,12 @@ public class AstroUserService {
         return users;
     }
 
-    public void likeUser(Optional<AstroUser> user, Optional<AstroUser> principalUser) {
+    public boolean likeUser(Optional<AstroUser> user, Optional<AstroUser> principalUser) {
         AstroUser userToLike = user.get();
         AstroUser userThatLikes = principalUser.get();
 
         if (userThatLikes.getLikedUsers().contains(userToLike.getUsername())) {
-            return;
+            return false;
         }
 
         userThatLikes.likeUser(userToLike);
@@ -165,9 +165,13 @@ public class AstroUserService {
             userToLike.createMatch(userThatLikes);
 
             astroUserRepository.save(userToLike);
+            astroUserRepository.save(userThatLikes);
+
+            return true;
         }
 
         astroUserRepository.save(userThatLikes);
+        return false;
     }
 
     public void blockUser(Optional<AstroUser> user, Optional<AstroUser> principalUser) {

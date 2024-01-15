@@ -82,7 +82,7 @@ public class AstroUserService {
                 .filter(user -> !user.getUsername().equals(principalUser.getUsername()))
                 .filter(user -> compatibleZodiacs.contains(user.getZodiacSign()))
                 .filter(user -> user.getSearchingFor() != null && user.getSearchingFor().contains(principalUser.getGender()))
-                .filter(user -> principalUser.getLikedUsers() != null && !user.getLikedUsers().contains(principalUser.getUsername()))
+                .filter(user -> principalUser.getLikedUsers() != null && !principalUser.getLikedUsers().contains(user.getUsername()))
                 .sorted((u1, u2) -> {
                     int score1 = getCompatibilityScore(u1.getZodiacSign(), zodiacCompatibilities);
                     int score2 = getCompatibilityScore(u2.getZodiacSign(), zodiacCompatibilities);

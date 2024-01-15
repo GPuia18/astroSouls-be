@@ -239,15 +239,15 @@ public class AstroUserController {
     }
 
     @PutMapping("/edit-account")
-    public ResponseEntity<?> editAccount(@RequestBody UpdateAccountRequest updateAccountRequest) {
+    public ResponseEntity<AstroUser> editAccount(@RequestBody UpdateAccountRequest updateAccountRequest) {
         Optional<AstroUser> optionalPrincipalUser = userPrincipalService.getPrincipalUser();
 
         if (optionalPrincipalUser.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
 
-        astroUserService.editUser(updateAccountRequest, optionalPrincipalUser);
+        AstroUser astroUser = astroUserService.editUser(updateAccountRequest, optionalPrincipalUser);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(astroUser);
     }
 }

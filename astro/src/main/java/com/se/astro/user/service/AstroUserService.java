@@ -208,7 +208,7 @@ public class AstroUserService {
         astroUserRepository.save(userToChange);
     }
 
-    public void editUser(UpdateAccountRequest updateAccountRequest, Optional<AstroUser> optionalPrincipalUser) {
+    public AstroUser editUser(UpdateAccountRequest updateAccountRequest, Optional<AstroUser> optionalPrincipalUser) {
         AstroUser principalUser = optionalPrincipalUser.get();
 
         if (updateAccountRequest.getZodiacSign() != null) {
@@ -248,6 +248,8 @@ public class AstroUserService {
             principalUser.setImages(updateAccountRequest.getImages());
         }
 
-        AstroUser updatedUser = astroUserRepository.save(principalUser);
+        astroUserRepository.save(principalUser);
+
+        return principalUser;
     }
 }

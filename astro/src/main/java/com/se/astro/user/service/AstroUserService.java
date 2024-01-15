@@ -1,5 +1,6 @@
 package com.se.astro.user.service;
 
+import com.se.astro.product.model.Product;
 import com.se.astro.user.dto.UserCompatibility;
 import com.se.astro.user.model.AstroUser;
 import com.se.astro.user.dto.FilterSearchRequest;
@@ -189,10 +190,11 @@ public class AstroUserService {
         astroUserRepository.save(userToBlock);
     }
 
-    public void changeUserAccountType(Optional<AstroUser> user, AccountType accountType) {
+    public void changeUserAccountType(Optional<AstroUser> user, AccountType accountType, Product product) {
         AstroUser userToChange = user.get();
 
         userToChange.setAccountType(accountType);
+        userToChange.setPremiumExpiration(LocalDateTime.now().plusMonths(product.getLength()));
 
         astroUserRepository.save(userToChange);
     }

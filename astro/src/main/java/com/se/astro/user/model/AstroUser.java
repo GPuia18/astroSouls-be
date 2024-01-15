@@ -49,7 +49,7 @@ public class AstroUser implements UserDetails {
     private boolean banned;
     private List<String> blockedUsers;
     private List<String> groups;
-
+    private LocalDateTime premiumExpiration;
 
     public AstroUser(String username, String password, String email, LocalDateTime birthday,
                      String zodiacSign, Gender gender, List<Gender> searchingFor, double height,
@@ -80,14 +80,15 @@ public class AstroUser implements UserDetails {
         this.banned = false;
     }
 
-    public void likeUser(AstroUser user){
+    public void likeUser(AstroUser user) {
         this.likedUsers.add(user.username);
     }
-    public void blockUser(AstroUser user){
+
+    public void blockUser(AstroUser user) {
         this.blockedUsers.add(user.username);
     }
 
-    public void createMatch(AstroUser user){
+    public void createMatch(AstroUser user) {
         this.matchedUsers.add(user.username);
     }
 

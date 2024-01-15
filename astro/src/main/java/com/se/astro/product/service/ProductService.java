@@ -30,6 +30,7 @@ public class ProductService {
                 .name(addProductRequest.getName())
                 .description(addProductRequest.getDescription())
                 .price(addProductRequest.getPrice())
+                .length(addProductRequest.getLength())
                 .build();
 
         productRepository.save(product);

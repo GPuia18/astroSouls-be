@@ -10,10 +10,12 @@ import com.se.astro.helper.UserPrincipalService;
 import com.se.astro.user.model.AstroUser;
 import com.se.astro.user.service.AstroUserService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,11 +55,18 @@ public class MessageController {
 
     @PostMapping("/send-with-image")
     @PreAuthorize("hasAnyAuthority('ROLE_BRONZE', 'ROLE_SILVER', 'ROLE_GOLD', 'ROLE_ADMIN')")
-    public ResponseEntity<AstroUser> sendMessageWithImageToUserByUsernameOrEmail(@RequestBody MessageRequestWithImage messageRequest) {
+    public ResponseEntity<?> sendMessageWithImageToUserByUsernameOrEmail(@RequestBody MessageRequestWithImage messageRequest) {
         Optional<AstroUser> principalUser = userPrincipalService.getPrincipalUser();
 
         if (principalUser.isEmpty()) {
             return ResponseEntity.badRequest().build();
+        }
+
+        // Check if the subscription has expired
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime expiration = principalUser.get().getPremiumExpiration();
+        if (expiration != null && now.isAfter(expiration)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Subscription has expired.");
         }
 
         Optional<AstroUser> user = Optional.empty();

@@ -1,5 +1,7 @@
 package com.se.astro.user.controller;
 
+import com.se.astro.product.model.Product;
+import com.se.astro.product.repository.ProductRepository;
 import com.se.astro.user.dto.AccountTypeRequest;
 import com.se.astro.user.dto.SearchRequest;
 import com.se.astro.helper.UserPrincipalService;
@@ -9,10 +11,12 @@ import com.se.astro.user.dto.FilterSearchRequest;
 import com.se.astro.user.model.enums.AccountType;
 import com.se.astro.user.service.AstroUserService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +28,7 @@ import java.util.Optional;
 public class AstroUserController {
     private final AstroUserService astroUserService;
     private final UserPrincipalService userPrincipalService;
+    private final ProductRepository productRepository;
 
     @GetMapping
     public List<AstroUser> fetchAllUsers() {
@@ -100,6 +105,13 @@ public class AstroUserController {
             return ResponseEntity.badRequest().build();
         }
 
+        // Check if the subscription has expired
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime expiration = principalUser.get().getPremiumExpiration();
+        if (expiration != null && now.isAfter(expiration)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Subscription has expired.");
+        }
+        
         List<AstroUser> users = astroUserService.findUsersWithFilters(searchRequest, principalUser.get());
         return ResponseEntity.ok(users);
     }
@@ -200,7 +212,13 @@ public class AstroUserController {
         try {
             AccountType accountType = AccountType.valueOf(accountTypeRequest.getAccountType());
 
-            astroUserService.changeUserAccountType(principalUser, accountType);
+            Optional<Product> product = productRepository.findByName(accountType.name());
+
+            if (product.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            astroUserService.changeUserAccountType(principalUser, accountType, product.get());
 
             return ResponseEntity.ok().build();
         } catch (Exception e) {

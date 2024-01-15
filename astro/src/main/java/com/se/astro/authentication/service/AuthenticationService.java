@@ -63,6 +63,7 @@ public class AuthenticationService {
                 .groups(new ArrayList<>())
                 .images(new ArrayList<>())
                 .banned(false)
+                .premiumExpiration(null)
                 .build();
 
         astroUserRepository.save(user);

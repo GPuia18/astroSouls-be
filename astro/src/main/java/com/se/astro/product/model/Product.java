@@ -18,5 +18,7 @@ public class Product {
     @Indexed(unique = true)
     private String name;
     private String description;
+    //in months
+    private int length;
     private double price;
 }

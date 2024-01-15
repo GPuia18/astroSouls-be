@@ -204,7 +204,7 @@ public class AstroUserController {
 
         Optional<AstroUser> principalUser = userPrincipalService.getPrincipalUser();
 
-        if (principalUser.isEmpty()) {
+        if (principalUser.isEmpty() || accountTypeRequest.getAccountType().equals("Admin")) {
             return ResponseEntity.badRequest().build();
         }
 

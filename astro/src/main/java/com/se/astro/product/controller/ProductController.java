@@ -39,6 +39,11 @@ public class ProductController {
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> addProduct(@RequestBody AddProductRequest addProductRequest) {
+
+        if (addProductRequest.getName().equals("Admin")) {
+            return ResponseEntity.badRequest().build();
+        }
+
         productService.addProduct(addProductRequest);
         return ResponseEntity.ok().build();
     }

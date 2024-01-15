@@ -163,7 +163,7 @@ public class AstroUserController {
 
             astroUserService.blockUser(user, principalUser);
 
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(SuccessResponse.builder().message("Success").build());
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -193,7 +193,7 @@ public class AstroUserController {
                 astroUserService.banUser(user);
             }
 
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(SuccessResponse.builder().message("Success").build());
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -219,7 +219,7 @@ public class AstroUserController {
 
             astroUserService.changeUserAccountType(principalUser, accountType, product.get());
 
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(SuccessResponse.builder().message("Success").build());
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }

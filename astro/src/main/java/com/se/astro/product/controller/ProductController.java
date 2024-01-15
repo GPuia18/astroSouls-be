@@ -4,6 +4,7 @@ import com.se.astro.product.dto.AddProductRequest;
 import com.se.astro.product.dto.SearchProductRequest;
 import com.se.astro.product.model.Product;
 import com.se.astro.product.service.ProductService;
+import com.se.astro.user.dto.SuccessResponse;
 import com.se.astro.user.model.AstroUser;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -45,13 +46,13 @@ public class ProductController {
         }
 
         productService.addProduct(addProductRequest);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(SuccessResponse.builder().message("Success").build());
     }
 
     @PostMapping("/delete")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> deleteProduct(@RequestBody SearchProductRequest searchProductRequest) {
         productService.deleteProduct(searchProductRequest);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(SuccessResponse.builder().message("Success").build());
     }
 }

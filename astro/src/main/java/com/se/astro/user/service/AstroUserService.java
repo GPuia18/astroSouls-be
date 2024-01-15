@@ -1,6 +1,7 @@
 package com.se.astro.user.service;
 
 import com.se.astro.product.model.Product;
+import com.se.astro.user.dto.UpdateAccountRequest;
 import com.se.astro.user.dto.UserCompatibility;
 import com.se.astro.user.model.AstroUser;
 import com.se.astro.user.dto.FilterSearchRequest;
@@ -197,5 +198,48 @@ public class AstroUserService {
         userToChange.setPremiumExpiration(LocalDateTime.now().plusMonths(product.getLength()));
 
         astroUserRepository.save(userToChange);
+    }
+
+    public void editUser(UpdateAccountRequest updateAccountRequest, Optional<AstroUser> optionalPrincipalUser) {
+        AstroUser principalUser = optionalPrincipalUser.get();
+        
+        if (updateAccountRequest.getZodiacSign() != null) {
+            principalUser.setZodiacSign(updateAccountRequest.getZodiacSign());
+        }
+        if (updateAccountRequest.getGender() != null) {
+            principalUser.setGender(updateAccountRequest.getGender());
+        }
+        if (updateAccountRequest.getSearchingFor() != null) {
+            principalUser.setSearchingFor(updateAccountRequest.getSearchingFor());
+        }
+        if (updateAccountRequest.getHeight() != null) {
+            principalUser.setHeight(updateAccountRequest.getHeight());
+        }
+        if (updateAccountRequest.getNationality() != null) {
+            principalUser.setNationality(updateAccountRequest.getNationality());
+        }
+        if (updateAccountRequest.getLanguage() != null) {
+            principalUser.setLanguage(updateAccountRequest.getLanguage());
+        }
+        if (updateAccountRequest.getHeader() != null) {
+            principalUser.setHeader(updateAccountRequest.getHeader());
+        }
+        if (updateAccountRequest.getDescription() != null) {
+            principalUser.setDescription(updateAccountRequest.getDescription());
+        }
+        if (updateAccountRequest.getAgeRangeMin() != null) {
+            principalUser.setAgeRangeMin(updateAccountRequest.getAgeRangeMin());
+        }
+        if (updateAccountRequest.getAgeRangeMax() != null) {
+            principalUser.setAgeRangeMax(updateAccountRequest.getAgeRangeMax());
+        }
+        if (updateAccountRequest.getTags() != null) {
+            principalUser.setTags(updateAccountRequest.getTags());
+        }
+        if (updateAccountRequest.getImages() != null) {
+            principalUser.setImages(updateAccountRequest.getImages());
+        }
+
+        AstroUser updatedUser = astroUserRepository.save(principalUser);
     }
 }

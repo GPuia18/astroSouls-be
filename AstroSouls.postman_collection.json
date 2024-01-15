@@ -850,6 +850,46 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "EditUser",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0IiwiaWF0IjoxNzA1MzA4NTM5LCJleHAiOjE3MDUzOTQ5Mzl9.GQNoN1EIrzTwGOKha0R3PQbsILbUCFx9je4p1YpGYXc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{    \r\n    \"zodiacSign\": \"Aries\",\r\n    \"gender\": \"MALE\",\r\n    \"searchingFor\": [\"FEMALE\", \"OTHER\"],\r\n    \"height\": 175.5,\r\n    \"nationality\": \"UNITED_KINGDOM\",\r\n    \"language\": [\"ENGLISH\", \"SPANISH\"],\r\n    \"header\": \"About Me\",\r\n    \"description\": \"I am a software developer interested in astrology.\",\r\n    \"ageRangeMin\": 25,\r\n    \"ageRangeMax\": 35,\r\n    \"tags\": [\"FOODIE\", \"TRAVELER\"],\r\n    \"images\": [\"image1.jpg\", \"image2.jpg\"]\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/users/edit-account",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"users",
+						"edit-account"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"event": [

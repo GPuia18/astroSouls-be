@@ -2,12 +2,9 @@ package com.se.astro.user.controller;
 
 import com.se.astro.product.model.Product;
 import com.se.astro.product.repository.ProductRepository;
-import com.se.astro.user.dto.AccountTypeRequest;
-import com.se.astro.user.dto.SearchRequest;
+import com.se.astro.user.dto.*;
 import com.se.astro.helper.UserPrincipalService;
-import com.se.astro.user.dto.UserCompatibility;
 import com.se.astro.user.model.AstroUser;
-import com.se.astro.user.dto.FilterSearchRequest;
 import com.se.astro.user.model.enums.AccountType;
 import com.se.astro.user.service.AstroUserService;
 import lombok.AllArgsConstructor;
@@ -111,7 +108,7 @@ public class AstroUserController {
         if (expiration != null && now.isAfter(expiration)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Subscription has expired.");
         }
-        
+
         List<AstroUser> users = astroUserService.findUsersWithFilters(searchRequest, principalUser.get());
         return ResponseEntity.ok(users);
     }
@@ -237,5 +234,18 @@ public class AstroUserController {
         List<UserCompatibility> users = astroUserService.findCompatibleUsers(principalUser.get());
 
         return ResponseEntity.ok(users);
+    }
+
+    @PutMapping("/edit-account")
+    public ResponseEntity<?> editAccount(@RequestBody UpdateAccountRequest updateAccountRequest) {
+        Optional<AstroUser> optionalPrincipalUser = userPrincipalService.getPrincipalUser();
+
+        if (optionalPrincipalUser.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        astroUserService.editUser(updateAccountRequest, optionalPrincipalUser);
+
+        return ResponseEntity.ok().build();
     }
 }

@@ -32,4 +32,5 @@ public class RegisterRequest {
     private int ageRangeMin;
     private int ageRangeMax;
     private List<Tag> tags;
+    private List<String> images;
 }
